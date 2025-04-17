@@ -24,6 +24,6 @@ router.route('/:userId').get(getUsers).delete(deleteUser);
 router.route('/:userId/friends/:friendId').get(getUserById).post(addFriend);
 
 // delete a friends assocaited to a specific user
-router.route('/:userID/friends/:friendId').get(getUserById).put(deleteFriend);
+router.route('/:userId/friends/:friendId').get(getUserById).put(deleteFriend);
 
 export default router;

@@ -12,7 +12,7 @@ interface IUser extends Document{
 const userSchema = new Schema({
 
     userName: {type: String, unique: true, required: true, trim: true },
-    email: {type: String, unique: true, required: true},
+    email: {type: String, unique: true, required: true, match: [/.+@.+\..+/, 'Must use a valid email address']},
     thoughts: [
         {
         type: Schema.Types.ObjectId,

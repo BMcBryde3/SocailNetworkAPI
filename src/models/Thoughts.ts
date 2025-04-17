@@ -20,7 +20,10 @@ const reactionSchema = new Schema<IReaction>({
   reactionId: { type: Schema.Types.ObjectId,default: () => new Types.ObjectId(),},
   reactionBody: {type:String, required: true, maxlength: 280},
   userName: {type:String, required: true},
-  createdAt: {type:Date, default: Date.now}
+  createdAt: {
+    type:Date, 
+    default: Date.now,
+    format: 'YYYY-MM-DD HH:mm:ss'}
 
 },  {
   toJSON: {

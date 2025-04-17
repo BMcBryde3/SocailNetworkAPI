@@ -42,15 +42,8 @@ import { Request, Response } from 'express';
 
 export const updatedUser = async (req:Request, res:Response ) =>{
 
-    try{
-
-        const user = await User.findOneAndDelete({ _id: req.params.userId });
-
-        if (!user) {
-            return res.status(404).json({ message: 'No user with that ID' });
-          }
-
-          await User.findOneAndUpdate(
+    try {
+          const updatedUser = await User.findOneAndUpdate(
             { _id: req.params.userId },
             {
               $set: {
@@ -60,16 +53,20 @@ export const updatedUser = async (req:Request, res:Response ) =>{
                 friends: req.body.friends
               }
             },
-            { new: true }
+            { new: true, runValidators: true }
           );
-          res.json({ message: `User ${req.params.userId} has been update to ${req.body}`})
-            return;
+
+          if (!updatedUser) {
+            return res.status(404).json({ message: 'No user with that ID' });
+          }
+
+          res.json({ message: `User ${req.params.userId} has been updated`, updatedUser });
+          return;
         } catch (err) {
-            res.status(500).json(err);
-            return;
-            }
+          res.status(500).json(err);
+          return;
         }
-    
+      }
 
 
 

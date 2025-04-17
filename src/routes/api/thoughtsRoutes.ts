@@ -21,7 +21,7 @@ router.route('/:id').get(getThoughts).delete(deleteThought)
 
 //embeded reaction routes
 
-router.route('/:thoughtId/reactions').post(addReaction);
+router.route('/:thoughtId/reactions').put(addReaction);
 
 router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction);
 
