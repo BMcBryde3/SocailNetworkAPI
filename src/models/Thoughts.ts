@@ -1,14 +1,37 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, ObjectId, Types } from 'mongoose';
 
 interface IThought extends Document {
   thoughtText: string;
   createdAt: Date;
   username: string;
-  reactions: Schema.Types.ObjectId[];
+  reactions?: typeof reactionSchema[];
 }
 
+
+interface IReaction extends Document{
+  reactionId: ObjectId;
+  reactionBody: string;
+  userName: string;
+  createdAt: Date;
+}
+
+const reactionSchema = new Schema<IReaction>({
+
+  reactionId: { type: Schema.Types.ObjectId,default: () => new Types.ObjectId(),},
+  reactionBody: {type:String, required: true, maxlength: 280},
+  userName: {type:String, required: true},
+  createdAt: {type:Date, default: Date.now}
+
+},  {
+  toJSON: {
+    getters: true,
+  },
+  id: false,
+});
+
+
 // Schema to create Post model
-const postSchema = new Schema<IThought>(
+const thoughtsSchema = new Schema<IThought>(
   {
     thoughtText: {
       type: String,
@@ -21,10 +44,7 @@ const postSchema = new Schema<IThought>(
       default: Date.now,
     },
     reactions: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'reacts',
-      },
+      reactionSchema
     ],
     username: {
       type: String,
@@ -39,14 +59,14 @@ const postSchema = new Schema<IThought>(
 );
 
 // Create a virtual property `upvoteCount` that gets the amount of comments per user
-postSchema
+thoughtsSchema
   .virtual('reactionCount')
   // Getter
   .get(function (this: IThought) {
-    return this.reactions.length
+    return this.reactions?.length?? 0
   });
 
 // Initialize our Post model
-const Thoughts = model('thoughts', postSchema);
+const Thoughts = model('thoughts', thoughtsSchema);
 
 export default Thoughts;

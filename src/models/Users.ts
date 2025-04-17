@@ -5,8 +5,8 @@ interface IUser extends Document{
 
     userName: string;
     email: string;
-    thoughts: number[];
-    friends: number[];
+    thoughts?: number[];
+    friends?: number[];
 }
 
 const userSchema = new Schema({
@@ -35,7 +35,7 @@ const userSchema = new Schema({
 
 userSchema.virtual('friendCount')
     .get(function (this: IUser){
-        return `${this.friends.length}`
+        return this.friends?.length ?? 0
     })
 
 const User = model('user', userSchema)
